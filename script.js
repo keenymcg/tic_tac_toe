@@ -16,6 +16,8 @@ const game = (() => {
 
     // Starting the Game
     function start() {
+        console.log("Let the game begin!")
+
         // Render the board
         renderBoard();
 
@@ -43,7 +45,8 @@ const game = (() => {
 
     // Handle Click Events
     function handleCellClick(event) {
-        const index = event.target.dataset.index;
+        const index = event.target.dataset.cell;
+        console.log(`You've clicked the board at index ${index}!`)
 
         if (board[index] === '') {
             board[index] = currentPlayer;
@@ -53,13 +56,17 @@ const game = (() => {
         if (checkWin(currentPlayer)) {
             setStatus(`${currentPlayer} wins!`)
             endGame();
+            return;
         };
 
-        // MORE TO DO HERE: 
-        // checkDraw
+        if (board.every(cell => cell !== '')) {
+            setStatus(`It's a draw!`)
+            endGame();
+            return;
+        }
 
-        // If neither checkWin nor checkDraw, switch currentPlayer and change status of turn
-
+        currentPlayer = currentPlayer === player1 ? player2 : player1;
+        setStatus(`It's ${currentPlayer}'s turn!`);
     };
 
     // Check for Winner or Draw
@@ -95,7 +102,7 @@ const game = (() => {
     return { start };
 })();
 
-// game.start();
+game.start();
 
 // // TESTS 
 // // REMEMBER: Always return the function you want at the end of the Game IIFE if you want to use it
