@@ -2,13 +2,14 @@
 const game = (() => {
     // Set Board Values
     const board = ['', '', '', '', '', '', '', '', ''];
+    // const testBoard = ['x', 'o', 'x', 'o', 'x', 'o', 'x', 'o', 'x'];
 
     // Define Players
     const player1 = 'x'
     const player2 = 'o'
     let currentPlayer = player1
 
-    // Gather DOM elements?
+    // Gather DOM elements
     const boardCells = document.querySelectorAll(".board div");
     const restartButton = document.getElementById("restartButton");
     const statusMessage = document.querySelector("status-message-text");
@@ -85,7 +86,13 @@ const game = (() => {
     };
 
 
-    return { start };
-});
+    return { start, renderBoard };
+})();
 
 // game.start();
+
+// // TESTS 
+// // REMEMBER: Always return the function you want at the end of the Game IIFE if you want to use it
+// // for example: return { start, renderBoard };
+// game.renderBoard(); 
+
