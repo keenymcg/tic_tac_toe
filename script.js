@@ -2,7 +2,7 @@
 const game = (() => {
     // Set Board Values
     const board = ['', '', '', '', '', '', '', '', ''];
-    // const testBoard = ['x', 'o', 'x', 'o', 'x', 'o', 'x', 'o', 'x'];
+    // const testBoard = ['x', 'o', 'x', 'o', 'x', 'o', 'x', 'o', 'x']; // useful for renderBoard() test
 
     // Define Players
     const player1 = 'x'
@@ -12,7 +12,7 @@ const game = (() => {
     // Gather DOM elements
     const boardCells = document.querySelectorAll(".board div");
     const restartButton = document.getElementById("restartButton");
-    const statusMessage = document.querySelector("status-message-text");
+    const statusMessage = document.querySelector(".status-message-text");
 
     // Starting the Game
     function start() {
@@ -78,7 +78,8 @@ const game = (() => {
     };
 
     function endGame() {
-        
+        // No more clicks allowed
+        boardCells.forEach(cell => cell.removeEventListener('click', handleCellClick));
     };
 
     function restart() {
@@ -86,7 +87,7 @@ const game = (() => {
     };
 
 
-    return { start, renderBoard };
+    return { start, setStatus };
 })();
 
 // game.start();
@@ -95,4 +96,4 @@ const game = (() => {
 // // REMEMBER: Always return the function you want at the end of the Game IIFE if you want to use it
 // // for example: return { start, renderBoard };
 // game.renderBoard(); 
-
+// game.setStatus("Player One's Turn");
