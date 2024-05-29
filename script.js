@@ -20,7 +20,7 @@ const game = (() => {
         renderBoard();
 
         // Set the Status, like: Whose turn, the Winner, or It's a Draw
-        setStatus();
+        setStatus(`${currentPlayer}'s turn!`);
 
         // Tell Cells to handle click events
         boardCells.forEach(cell => cell.addEventListener("click", handleCellClick)); 
@@ -83,11 +83,16 @@ const game = (() => {
     };
 
     function restart() {
+        // Clear Board array values, Change current player, & Start game again
+        board.fill("");
+        currentPlayer = player1
+        start();
 
+        // Need to reinstate event listener here?
     };
 
 
-    return { start, setStatus };
+    return { start };
 })();
 
 // game.start();
