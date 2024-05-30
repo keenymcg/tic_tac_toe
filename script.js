@@ -23,9 +23,13 @@ const game = (() => {
 
         // Set the Status, like: Whose turn, the Winner, or It's a Draw
         setStatus(`${currentPlayer}'s turn!`);
-
-        // Tell Cells to handle click events
-        boardCells.forEach(cell => cell.addEventListener("click", handleCellClick)); 
+        
+        // Tell Cells to handle Click & Hover events
+        boardCells.forEach(cell => {
+            cell.addEventListener("click", handleCellClick);
+            cell.addEventListener("mouseover", handleHover);
+            cell.addEventListener("mouseout", handleMouseout); 
+        }); 
 
         // Initialize Restart Button
         restartButton.addEventListener('click', restart);
@@ -69,6 +73,33 @@ const game = (() => {
         setStatus(`It's ${currentPlayer}'s turn!`);
     };
 
+    // Handle Hover Events
+    function handleHover(event) {
+        const index = event.target.dataset.cell; // grab the index of the cell
+        
+        // Check whose turn it is and set the appropriate image
+        if (currentPlayer === player1) {
+            boardCells[index].style.backgroundImage = 'url("images/bird.png")';
+        } else if (currentPlayer === player2) {
+            boardCells[index].style.backgroundImage = 'url("images/snake.png")';
+        }
+
+        // Set the opacity to 60%
+        boardCells[index].style.opacity = '0.6';
+
+        // Make the image fit the cell
+        boardCells[index].style.backgroundSize = 'cover';
+    };
+
+    // Handle Mouseout Events
+    function handleMouseout(event) {
+        const index = event.target.dataset.cell; // grab the index of the cell
+    
+        // Remove the background image
+        boardCells[index].style.backgroundImage = '';
+    }
+
+
     // Check for Winner or Draw
     function checkWin(player) {
         const winConditions = [
@@ -86,7 +117,11 @@ const game = (() => {
 
     function endGame() {
         // No more clicks allowed
-        boardCells.forEach(cell => cell.removeEventListener('click', handleCellClick));
+        boardCells.forEach(cell => {
+            cell.removeEventListener('click', handleCellClick);
+            cell.removeEventListener('mouseover', handleHover);
+            cell.removeEventListener('mouseout', handleMouseout);
+        })
     };
 
     function restart() {
