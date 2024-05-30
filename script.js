@@ -22,7 +22,7 @@ const game = (() => {
         renderBoard();
 
         // Set the Status, like: Whose turn, the Winner, or It's a Draw
-        setStatus(`${currentPlayer}'s turn!`);
+        setStatus(`Let's begin! It's Bird's turn!`);
         
         // Tell Cells to handle Click & Hover events
         boardCells.forEach(cell => {
@@ -38,8 +38,18 @@ const game = (() => {
     // Renders the Board
     function renderBoard() {
         board.forEach((value, index) => { 
-            boardCells[index].textContent = value 
-        })
+            boardCells[index].style.backgroundSize = 'cover';
+
+            if (value === 'x') {
+                boardCells[index].style.backgroundImage = 'url("images/bird.png")';
+                boardCells[index].style.opacity = '1'; // Set opacity to 100%
+            } else if (value === 'o') {
+                boardCells[index].style.backgroundImage = 'url("images/snake.png")';
+                boardCells[index].style.opacity = '1'; // Set opacity to 100%
+            } else {
+                boardCells[index].style.backgroundImage = '';
+            }
+        });
     };
 
     // Set Status of Game, like: Whose Turn, the Winner, or It's a Draw
@@ -50,7 +60,13 @@ const game = (() => {
     // Handle Click Events
     function handleCellClick(event) {
         const index = event.target.dataset.cell;
-        console.log(`You've clicked the board at index ${index}!`)
+
+        // If the cell already has a value, return early to prevent the rest of the function from executing
+        if (board[index] !== '') {
+            return;
+        };
+
+        console.log(`${currentPlayer} clicked the board at index ${index}!`)
 
         if (board[index] === '') {
             board[index] = currentPlayer;
@@ -58,7 +74,12 @@ const game = (() => {
         } 
         
         if (checkWin(currentPlayer)) {
-            setStatus(`${currentPlayer} wins!`)
+            console.log(`${currentPlayer} wins!`)
+            if (currentPlayer === player1) {
+                setStatus(`Bird wins!`);
+            } else {
+                setStatus(`Snake wins!`);
+            };
             endGame();
             return;
         };
@@ -70,22 +91,26 @@ const game = (() => {
         }
 
         currentPlayer = currentPlayer === player1 ? player2 : player1;
-        setStatus(`It's ${currentPlayer}'s turn!`);
+        let currentAnimal = currentPlayer === player1 ? 'Bird' : 'Snake';
+        setStatus(`It's ${currentAnimal}'s turn!`);
     };
 
     // Handle Hover Events
     function handleHover(event) {
         const index = event.target.dataset.cell; // grab the index of the cell
         
-        // Check whose turn it is and set the appropriate image
-        if (currentPlayer === player1) {
-            boardCells[index].style.backgroundImage = 'url("images/bird.png")';
-        } else if (currentPlayer === player2) {
-            boardCells[index].style.backgroundImage = 'url("images/snake.png")';
-        }
+        // Check if the cell already has an image
+        if (board[index] === '') {
+            // Check whose turn it is and set the appropriate image
+            if (currentPlayer === player1) {
+                boardCells[index].style.backgroundImage = 'url("images/bird.png")';
+            } else if (currentPlayer === player2) {
+                boardCells[index].style.backgroundImage = 'url("images/snake.png")';
+            }
 
-        // Set the opacity to 60%
-        boardCells[index].style.opacity = '0.6';
+            // Set the opacity to 60%
+            boardCells[index].style.opacity = '0.6';
+        }
 
         // Make the image fit the cell
         boardCells[index].style.backgroundSize = 'cover';
@@ -94,10 +119,13 @@ const game = (() => {
     // Handle Mouseout Events
     function handleMouseout(event) {
         const index = event.target.dataset.cell; // grab the index of the cell
-    
-        // Remove the background image
-        boardCells[index].style.backgroundImage = '';
-    }
+
+        // Check if the cell has a value of '' (empty)
+        if (board[index] === '') {
+            // Remove the background image
+            boardCells[index].style.backgroundImage = '';
+        }
+    };
 
 
     // Check for Winner or Draw
